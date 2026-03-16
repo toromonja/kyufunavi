@@ -1,65 +1,329 @@
-import Image from "next/image";
+import Link from "next/link";
+import {
+  Search,
+  ArrowRight,
+  CheckCircle,
+  ClipboardList,
+  Calculator,
+  CalendarDays,
+  BookOpen,
+} from "lucide-react";
+import { subsidies, categories } from "@/data/subsidies";
+import { createMetadata } from "@/lib/metadata";
 
-export default function Home() {
+export const metadata = createMetadata();
+
+const categoryIcons: Record<string, string> = {
+  equipment: "⚙️",
+  digital: "💻",
+  sales: "📈",
+  restructure: "🔄",
+  employment: "👥",
+  environment: "🌿",
+  startup: "🚀",
+  research: "🔬",
+  finance: "💴",
+  succession: "🏢",
+};
+
+const statusBadge = {
+  open: { label: "受付中", className: "bg-emerald-100 text-emerald-700 border border-emerald-200" },
+  upcoming: {
+    label: "近日公募予定",
+    className: "bg-amber-100 text-amber-700 border border-amber-200",
+  },
+  closed: { label: "締切済み", className: "bg-slate-100 text-slate-500 border border-slate-200" },
+};
+
+export default function HomePage() {
+  const featuredSubsidies = subsidies.filter((s) => s.status !== "closed").slice(0, 6);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-20 md:py-28">
+          <div className="max-w-3xl">
+            <p className="text-amber-400 text-sm font-semibold tracking-widest mb-4 uppercase">
+              補助金・助成金ナビゲーター
+            </p>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              使える補助金・助成金を、
+              <br />
+              <span className="text-amber-400">もっと身近に。</span>
+            </h1>
+            <p className="text-slate-300 text-lg md:text-xl leading-relaxed mb-10">
+              国・自治体の補助金・助成金を一覧で検索。
+              <br className="hidden sm:block" />
+              あなたの事業に合った制度を、わかりやすく解説します。
+            </p>
+
+            {/* Search Bar */}
+            <form action="/subsidy" method="GET" className="flex gap-3 max-w-xl">
+              <div className="flex-1 relative">
+                <Search
+                  size={18}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <input
+                  type="text"
+                  name="q"
+                  placeholder="制度名・キーワードで検索..."
+                  className="w-full pl-10 pr-4 py-3.5 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-6 py-3.5 rounded-lg transition-colors whitespace-nowrap text-sm"
+              >
+                検索
+              </button>
+            </form>
+
+            <div className="flex flex-wrap gap-3 mt-5">
+              {["ものづくり補助金", "IT導入", "持続化補助金", "雇用", "省エネ"].map((kw) => (
+                <Link
+                  key={kw}
+                  href={`/subsidy?q=${encodeURIComponent(kw)}`}
+                  className="text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-1.5 rounded-full transition-colors"
+                >
+                  {kw}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Stats bar */}
+      <section className="bg-amber-400">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex flex-wrap justify-center gap-8 text-slate-900">
+            <div className="text-center">
+              <span className="font-bold text-2xl">15+</span>
+              <span className="text-sm ml-1">掲載制度数</span>
+            </div>
+            <div className="text-center">
+              <span className="font-bold text-2xl">10</span>
+              <span className="text-sm ml-1">カテゴリ</span>
+            </div>
+            <div className="text-center">
+              <span className="font-bold text-2xl">最大7,000万円</span>
+              <span className="text-sm ml-1">の補助実績</span>
+            </div>
+            <div className="text-center">
+              <span className="font-bold text-2xl">随時更新</span>
+              <span className="text-sm ml-1">最新情報</span>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Category Grid */}
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">カテゴリから探す</h2>
+          <p className="text-slate-500">目的・業種に合わせて絞り込めます</p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+          {categories.map((cat) => (
+            <Link
+              key={cat.slug}
+              href={`/subsidy?category=${cat.slug}`}
+              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50 transition-all group text-center"
+            >
+              <span className="text-2xl">{categoryIcons[cat.slug] ?? "📌"}</span>
+              <span className="text-xs font-medium text-slate-700 group-hover:text-amber-700 leading-tight">
+                {cat.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Subsidies */}
+      <section className="bg-slate-50 py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-10">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">注目の制度</h2>
+              <p className="text-slate-500">現在受付中・公募予定の主要制度</p>
+            </div>
+            <Link
+              href="/subsidy"
+              className="hidden sm:flex items-center gap-1 text-amber-600 hover:text-amber-700 font-semibold text-sm"
+            >
+              すべて見る
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {featuredSubsidies.map((s) => {
+              const badge = statusBadge[s.status];
+              return (
+                <Link
+                  key={s.slug}
+                  href={`/subsidy/${s.slug}`}
+                  className="bg-white rounded-xl border border-slate-200 hover:border-amber-300 hover:shadow-md transition-all p-5 flex flex-col gap-3 group"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge.className}`}
+                    >
+                      {badge.label}
+                    </span>
+                    <span className="text-xs text-slate-400 text-right leading-tight">
+                      {s.ministryName}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 leading-snug group-hover:text-amber-700 transition-colors">
+                      {s.nameShort ?? s.name}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-0.5">{s.category}</p>
+                  </div>
+                  <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">{s.overview}</p>
+                  <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-100">
+                    <span className="text-amber-600 font-bold text-lg">
+                      最大{s.maxAmount.toLocaleString()}万円
+                    </span>
+                    <span className="text-xs text-slate-400">補助率 {s.subsidyRate}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="text-center mt-8 sm:hidden">
+            <Link
+              href="/subsidy"
+              className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-6 py-3 rounded-lg transition-colors"
+            >
+              すべての制度を見る
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Tools section */}
+      <section className="max-w-7xl mx-auto px-4 py-16">
+        <div className="mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">便利なツール</h2>
+          <p className="text-slate-500">あなたに最適な制度を見つけましょう</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {[
+            {
+              href: "/diagnose",
+              icon: <ClipboardList size={28} className="text-amber-500" />,
+              title: "診断ツール",
+              desc: "事業者区分・目的・業種を選ぶだけで、あなたに合った補助金・助成金を提案します。",
+              cta: "診断を始める",
+            },
+            {
+              href: "/simulate",
+              icon: <Calculator size={28} className="text-amber-500" />,
+              title: "補助額シミュレーター",
+              desc: "事業費を入力するだけで、もらえる補助金の目安額を簡単に試算できます。",
+              cta: "試算する",
+            },
+            {
+              href: "/schedule",
+              icon: <CalendarDays size={28} className="text-amber-500" />,
+              title: "公募スケジュール",
+              desc: "制度ごとの締切日・公募状況をひと目で確認。申請漏れを防ぎましょう。",
+              cta: "スケジュールを確認",
+            },
+            {
+              href: "/guide",
+              icon: <BookOpen size={28} className="text-amber-500" />,
+              title: "申請ガイド",
+              desc: "補助金・助成金の基礎知識から採択率を上げる書き方まで、詳しく解説します。",
+              cta: "ガイドを読む",
+            },
+          ].map((tool) => (
+            <Link
+              key={tool.href}
+              href={tool.href}
+              className="bg-white rounded-xl border border-slate-200 hover:border-amber-300 hover:shadow-md transition-all p-6 flex flex-col gap-3 group"
+            >
+              <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center">
+                {tool.icon}
+              </div>
+              <h3 className="font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
+                {tool.title}
+              </h3>
+              <p className="text-sm text-slate-500 leading-relaxed flex-1">{tool.desc}</p>
+              <span className="text-amber-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                {tool.cta}
+                <ArrowRight size={14} />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Trust section */}
+      <section className="bg-slate-900 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">給付ナビが選ばれる理由</h2>
+            <p className="text-slate-400">補助金・助成金活用をわかりやすくサポート</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                title: "最新情報を随時更新",
+                desc: "公募期間・補助額・要件の変更を反映。常に正確な情報を提供します。",
+              },
+              {
+                title: "初心者にもわかりやすく",
+                desc: "専門用語を避け、申請の流れや注意点を平易な言葉で解説します。",
+              },
+              {
+                title: "国の公式情報に基づく",
+                desc: "各省庁・中小企業庁の公式発表をもとにした信頼性の高い情報を掲載しています。",
+              },
+            ].map((item) => (
+              <div key={item.title} className="flex gap-4">
+                <CheckCircle size={20} className="text-amber-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-bold text-white mb-1">{item.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="max-w-7xl mx-auto px-4 py-16 text-center">
+        <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
+          まず診断ツールで確認してみましょう
+        </h2>
+        <p className="text-slate-500 mb-8 max-w-lg mx-auto">
+          事業者区分・目的・業種を選ぶだけで、
+          <br />
+          あなたに合った補助金・助成金をご提案します。
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            href="/diagnose"
+            className="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-8 py-4 rounded-lg transition-colors text-lg"
+          >
+            無料で診断する
+          </Link>
+          <Link
+            href="/subsidy"
+            className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-8 py-4 rounded-lg transition-colors text-lg"
+          >
+            全制度を一覧で見る
+          </Link>
+        </div>
+      </section>
+    </>
   );
 }
