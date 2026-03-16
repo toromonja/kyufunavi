@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const results = await searchSubsidies(keyword, {
-      acceptance: acceptance ?? undefined,
+      acceptance: (acceptance as "1" | "2") ?? "1",
       limit,
     });
     return NextResponse.json(results);

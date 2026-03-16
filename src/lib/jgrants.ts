@@ -29,13 +29,16 @@ export async function searchSubsidies(
   options?: {
     acceptance?: "1" | "2";
     limit?: number;
+    sort?: "created_date" | "acceptance_start_datetime" | "acceptance_end_datetime";
+    order?: "ASC" | "DESC";
   }
 ): Promise<JGrantsSubsidy[]> {
   const params = new URLSearchParams();
   params.set("keyword", keyword);
-  if (options?.acceptance) {
-    params.set("acceptance", options.acceptance);
-  }
+  // sort・order・acceptance はすべて必須パラメータ
+  params.set("sort", options?.sort ?? "acceptance_start_datetime");
+  params.set("order", options?.order ?? "DESC");
+  params.set("acceptance", options?.acceptance ?? "1");
   if (options?.limit) {
     params.set("limit", String(options.limit));
   }
