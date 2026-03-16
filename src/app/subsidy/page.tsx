@@ -42,7 +42,7 @@ function JGrantsSearch() {
     setSearched(true);
     try {
       const res = await fetch(
-        `/api/jgrants/search?keyword=${encodeURIComponent(kw)}&acceptance=2&limit=20`
+        `/api/jgrants/search?keyword=${encodeURIComponent(kw)}&acceptance=0&limit=20`
       );
       if (!res.ok) throw new Error("取得失敗");
       const data: JGrantsSubsidy[] = await res.json();

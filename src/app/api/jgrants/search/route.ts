@@ -6,12 +6,12 @@ export const runtime = "edge";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const keyword = searchParams.get("keyword") ?? "補助金";
-  const acceptance = searchParams.get("acceptance") as "1" | "2" | null;
+  const acceptance = searchParams.get("acceptance") as "0" | "1" | null;
   const limit = searchParams.get("limit") ? Number(searchParams.get("limit")) : undefined;
 
   try {
     const results = await searchSubsidies(keyword, {
-      acceptance: (acceptance as "1" | "2") ?? "1",
+      acceptance: (acceptance as "0" | "1") ?? "0",
       limit,
     });
     return NextResponse.json(results, {

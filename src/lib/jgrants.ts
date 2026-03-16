@@ -27,7 +27,7 @@ interface JGrantsDetailResponse {
 export async function searchSubsidies(
   keyword: string,
   options?: {
-    acceptance?: "1" | "2";
+    acceptance?: "0" | "1";
     limit?: number;
     sort?: "created_date" | "acceptance_start_datetime" | "acceptance_end_datetime";
     order?: "ASC" | "DESC";
@@ -38,7 +38,7 @@ export async function searchSubsidies(
   // sort・order・acceptance はすべて必須パラメータ
   params.set("sort", options?.sort ?? "acceptance_start_datetime");
   params.set("order", options?.order ?? "DESC");
-  params.set("acceptance", options?.acceptance ?? "1");
+  params.set("acceptance", options?.acceptance ?? "0");
   if (options?.limit) {
     params.set("limit", String(options.limit));
   }
