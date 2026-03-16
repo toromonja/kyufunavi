@@ -14,7 +14,9 @@ export async function GET(req: NextRequest) {
       acceptance: (acceptance as "1" | "2") ?? "1",
       limit,
     });
-    return NextResponse.json(results);
+    return NextResponse.json(results, {
+      headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=60" },
+    });
   } catch (err) {
     console.error("JGrants search error:", err);
     return NextResponse.json([], { status: 502 });

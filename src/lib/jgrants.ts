@@ -43,9 +43,7 @@ export async function searchSubsidies(
     params.set("limit", String(options.limit));
   }
 
-  const res = await fetch(`${BASE_URL}/subsidies?${params.toString()}`, {
-    next: { revalidate: 300 },
-  });
+  const res = await fetch(`${BASE_URL}/subsidies?${params.toString()}`);
 
   if (!res.ok) {
     throw new Error(`JGrants API error: ${res.status}`);
@@ -56,9 +54,7 @@ export async function searchSubsidies(
 }
 
 export async function getSubsidyDetail(id: string): Promise<JGrantsSubsidy | null> {
-  const res = await fetch(`${BASE_URL}/subsidies/id/${id}`, {
-    next: { revalidate: 300 },
-  });
+  const res = await fetch(`${BASE_URL}/subsidies/id/${id}`);
 
   if (!res.ok) {
     if (res.status === 404) return null;
